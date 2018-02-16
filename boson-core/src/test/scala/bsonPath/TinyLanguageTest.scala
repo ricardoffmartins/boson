@@ -13,11 +13,11 @@ object TinyLanguageTest {
     def main(args: Array[String]) = {
       val br4: BsonArray = new BsonArray().add("Insecticida")
       val br1: BsonArray = new BsonArray().add("Tarantula").add("Aracnídius").add(br4)
-      val obj1: BsonObject = new BsonObject().put("José", br1)
+      val obj1: BsonObject = new BsonObject().put("Jose", br1)
       val br2: BsonArray = new BsonArray().add("Spider")
-      val obj2: BsonObject = new BsonObject().put("José", br2)
+      val obj2: BsonObject = new BsonObject().put("Jose", br2)
       val br3: BsonArray = new BsonArray().add("Fly")
-      val obj3: BsonObject = new BsonObject().put("José", br3)
+      val obj3: BsonObject = new BsonObject().put("Jose", br3)
 
       val json: String = """
   {
@@ -53,7 +53,7 @@ object TinyLanguageTest {
 
       val arrTest: BsonArray = new BsonArray().add(2.2).add(2.4).add(2.6)
       val boson: BosonImpl = new BosonImpl(byteArray = Option(bsonEvent.encode().getBytes))
-      val language: String = "José.[0 to end]"
+      val language: String = "Jose.[0 to end]"
       val parser = new TinyLanguage
       parser.parseAll(parser.program, language) match {
         case parser.Success(r, _) =>

@@ -1209,7 +1209,7 @@ class BosonImpl(
                   dataType match {
                     case (D_BSONOBJECT | D_BSONARRAY) =>
                       val size:Int = buffer.getIntLE(buffer.readerIndex())
-                      val buf1: ByteBuf = buffer.readBytes(size)
+                      val buf1: ByteBuf = buffer.readRetainedSlice(size)
                       val buf2: ByteBuf = execStatementPatternMatch(buf1, list.drop(1), f)
                       buf1.release()
                       val buf3: ByteBuf = execStatementPatternMatch(buf2, list, f)
@@ -1259,12 +1259,12 @@ class BosonImpl(
         result.writeCharSequence(buffer.readCharSequence(valueLength,charset),charset)
       case D_BSONOBJECT =>
         val length: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonBuf: ByteBuf = buffer.readBytes(length)
+        val bsonBuf: ByteBuf = buffer.readRetainedSlice(length)
         result.writeBytes(bsonBuf)
         bsonBuf.release()
       case D_BSONARRAY =>
         val length: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonBuf: ByteBuf = buffer.readBytes(length)
+        val bsonBuf: ByteBuf = buffer.readRetainedSlice(length)
         result.writeBytes(bsonBuf)
         bsonBuf.release()
       case D_NULL =>
@@ -1309,7 +1309,7 @@ class BosonImpl(
         }
       case D_BSONOBJECT =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-        val bson:ByteBuf = buffer.readBytes(valueLength )
+        val bson:ByteBuf = buffer.readRetainedSlice(valueLength )
         val buf: ByteBuf = Unpooled.buffer(bson.capacity()).writeBytes(bson)
         val arrayBytes: Array[Byte] = buf.array()
         buf.release()
@@ -1319,7 +1319,7 @@ class BosonImpl(
         (result.writeBytes(newValue), newValue.length-valueLength)
       case D_BSONARRAY =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-        val bson: ByteBuf = buffer.readBytes(valueLength )
+        val bson: ByteBuf = buffer.readRetainedSlice(valueLength )
         val buf: ByteBuf = Unpooled.buffer(bson.capacity()).writeBytes(bson)
         val arrayBytes: Array[Byte] = buf.array()
         buf.release()
@@ -1382,19 +1382,19 @@ class BosonImpl(
       case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
         val valueLength: Int = buffer.readIntLE()
         result.writeIntLE(valueLength)
-        val buf :ByteBuf=buffer.readBytes(valueLength)
+        val buf :ByteBuf=buffer.readRetainedSlice(valueLength)
         result.writeBytes(buf)
         buf.release()
       case D_BSONOBJECT =>
         val length: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonBuf: ByteBuf = buffer.readBytes(length)
+        val bsonBuf: ByteBuf = buffer.readRetainedSlice(length)
         val resultAux:ByteBuf = modifyAll(list,bsonBuf, fieldID, f)
         bsonBuf.release()
         result.writeBytes(resultAux)
         resultAux.release()
       case D_BSONARRAY =>
         val length: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonBuf: ByteBuf = buffer.readBytes(length)
+        val bsonBuf: ByteBuf = buffer.readRetainedSlice(length)
         val resultAux: ByteBuf = modifyAll(list,bsonBuf, fieldID, f)
         bsonBuf.release()
         result.writeBytes(resultAux)
@@ -1434,7 +1434,7 @@ class BosonImpl(
         }
       case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
         val length: Int = buffer.readIntLE()
-        val value0: Array[Byte] = Unpooled.buffer(length-1).writeBytes(buffer.readBytes(length-1)).array()
+        val value0: Array[Byte] = Unpooled.buffer(length-1).writeBytes(buffer.readRetainedSlice(length-1)).array()
         resultCopy.writeIntLE(length).writeBytes(value0)
         buffer.readByte()
         val value: Any = applyFunction(f, value0)
@@ -1451,7 +1451,7 @@ class BosonImpl(
         }
       case D_BSONOBJECT =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonObj: ByteBuf = buffer.readBytes(valueLength)
+        val bsonObj: ByteBuf = buffer.readRetainedSlice(valueLength)
         resultCopy.writeBytes(bsonObj.duplicate())
         val buf: ByteBuf = Unpooled.buffer(bsonObj.capacity()).writeBytes(bsonObj)
         val arrayBytes: Array[Byte] = buf.array()
@@ -1462,7 +1462,7 @@ class BosonImpl(
         result.writeBytes(newValue)
       case D_BSONARRAY =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-        val bsonArray: ByteBuf = buffer.readBytes(valueLength)
+        val bsonArray: ByteBuf = buffer.readRetainedSlice(valueLength)
         resultCopy.writeBytes(bsonArray.duplicate())
         val buf: ByteBuf = Unpooled.buffer(bsonArray.capacity()).writeBytes(bsonArray)
         val arrayBytes: Array[Byte] = buf.array()
@@ -1526,7 +1526,7 @@ class BosonImpl(
                     case (D_BSONOBJECT | D_BSONARRAY) =>
                       if (exceptions.isEmpty) {
                         val size: Int = buffer.getIntLE(buffer.readerIndex())
-                        val buf1: ByteBuf = buffer.readBytes(size)
+                        val buf1: ByteBuf = buffer.readRetainedSlice(size)
                         val bufRes: ByteBuf = Unpooled.buffer()
                         val bufResCopy: ByteBuf = Unpooled.buffer()
                         result.clear().writeBytes(resultCopy.duplicate())
@@ -1576,7 +1576,7 @@ class BosonImpl(
                       if (exceptions.isEmpty) {
                         result.clear().writeBytes(resultCopy.duplicate())
                         val size: Int = buffer.getIntLE(buffer.readerIndex())
-                        val buf1: ByteBuf = buffer.readBytes(size)
+                        val buf1: ByteBuf = buffer.readRetainedSlice(size)
                        // val buf2: ByteBuf = execStatementPatternMatch(buf1.duplicate(), list, f)
                         val buf2: ByteBuf =
                           if(list.head._1.isInstanceOf[ArrExpr])
@@ -1634,7 +1634,7 @@ class BosonImpl(
                     case (D_BSONOBJECT | D_BSONARRAY) =>
                       if (exceptions.isEmpty) {
                         val size: Int = buffer.getIntLE(buffer.readerIndex())
-                        val buf1: ByteBuf = buffer.readBytes(size)
+                        val buf1: ByteBuf = buffer.readRetainedSlice(size)
                         val bufRes: ByteBuf = Unpooled.buffer()
                         val bufResCopy: ByteBuf = Unpooled.buffer()
                         resultCopy.clear().writeBytes(result.duplicate())
@@ -1732,7 +1732,7 @@ class BosonImpl(
                 dataType match {
                   case (D_BSONOBJECT | D_BSONARRAY) =>
                     val size: Int = buffer.getIntLE(buffer.readerIndex())
-                    val buf1: ByteBuf = buffer.readBytes(size)
+                    val buf1: ByteBuf = buffer.readRetainedSlice(size)
                     val buf2: ByteBuf = execStatementPatternMatch(buf1, list, f)
                     result.writeBytes(buf2.duplicate())
                     resultCopy.writeBytes(buf2.duplicate())
@@ -1753,7 +1753,7 @@ class BosonImpl(
                     case (D_BSONOBJECT | D_BSONARRAY) =>
                       if (exceptions.isEmpty) {
                         val size: Int = buffer.getIntLE(buffer.readerIndex())
-                        val buf1: ByteBuf = buffer.readBytes(size)
+                        val buf1: ByteBuf = buffer.readRetainedSlice(size)
                         val bufRes: ByteBuf = Unpooled.buffer()
                         val bufResCopy: ByteBuf = Unpooled.buffer()
                         resultCopy.clear().writeBytes(result.duplicate())
@@ -1801,7 +1801,7 @@ class BosonImpl(
                       if(exceptions.isEmpty) {
                         resultCopy.clear().writeBytes(result.duplicate())
                         val size: Int = buffer.getIntLE(buffer.readerIndex())
-                        val buf1: ByteBuf = buffer.duplicate().readBytes(size)
+                        val buf1: ByteBuf = buffer.duplicate().readRetainedSlice(size)
                         val buf2: ByteBuf = execStatementPatternMatch(buf1, list, f)
                         buf1.release()
                         Try(execStatementPatternMatch(buf2.duplicate(), list.drop(1), f)) match {
@@ -1848,7 +1848,7 @@ class BosonImpl(
                 dataType match {
                   case (D_BSONOBJECT | D_BSONARRAY) =>
                     val size: Int = buffer.getIntLE(buffer.readerIndex())
-                    val buf1: ByteBuf = buffer.readBytes(size)
+                    val buf1: ByteBuf = buffer.readRetainedSlice(size)
                     val buf2: ByteBuf = execStatementPatternMatch(buf1, list, f)
                     result.writeBytes(buf2.duplicate())
                     resultCopy.writeBytes(buf2.duplicate())
@@ -1867,7 +1867,7 @@ class BosonImpl(
                 dataType match {
                   case (D_BSONOBJECT | D_BSONARRAY) =>
                     val size: Int = buffer.getIntLE(buffer.readerIndex())
-                    val buf1: ByteBuf = buffer.readBytes(size)
+                    val buf1: ByteBuf = buffer.readRetainedSlice(size)
                     val buf2: ByteBuf = execStatementPatternMatch(buf1, list, f)
                     result.writeBytes(buf2.duplicate())
                     resultCopy.writeBytes(buf2.duplicate())
@@ -1924,7 +1924,7 @@ class BosonImpl(
         resultCopy.writeDoubleLE(value0)
       case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
         val valueLength: Int = buf.readIntLE()
-        val bytes: ByteBuf = buf.readBytes(valueLength)
+        val bytes: ByteBuf = buf.readRetainedSlice(valueLength)
         result.writeIntLE(valueLength)
         result.writeBytes(bytes.duplicate())
         resultCopy.writeIntLE(valueLength)
@@ -2004,7 +2004,7 @@ class BosonImpl(
               if(list.size==1) {
                 if(list.head._2.contains("..")){
                   val size: Int = buffer.getIntLE(buffer.readerIndex())
-                  val buf1: ByteBuf = buffer.readBytes(size)
+                  val buf1: ByteBuf = buffer.readRetainedSlice(size)
                   val res: BosonImpl = modifyArrayEnd(list, buf1, f, condition, limitInf, limitSup)
                   val buf2: ByteBuf = execStatementPatternMatch(res.getByteBuf.duplicate(), list, f)
 
@@ -2148,13 +2148,13 @@ class BosonImpl(
         result.writeDoubleLE(value0)
       case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
         val valueLength: Int = buf.readIntLE()
-        val bytes: ByteBuf = buf.readBytes(valueLength)
+        val bytes: ByteBuf = buf.readRetainedSlice(valueLength)
         result.writeIntLE(valueLength)
         result.writeBytes(bytes)
         bytes.release()
       case D_BSONOBJECT =>
         val length: Int = buf.getIntLE(buf.readerIndex())
-        val bsonBuf: ByteBuf = buf.readBytes(length)
+        val bsonBuf: ByteBuf = buf.readRetainedSlice(length)
         val newBsonBuf: ByteBuf = modifyHasElem(list,bsonBuf,key, elem, f)
         bsonBuf.release()
         result.writeBytes(newBsonBuf)
@@ -2208,7 +2208,7 @@ class BosonImpl(
               if(hasElem){
                 if(list.size==1) {
                   if(list.head._2.contains("..") ){
-                    val buf1: ByteBuf = buf.readBytes(bsonSize)
+                    val buf1: ByteBuf = buf.readRetainedSlice(bsonSize)
                     val buf2: ByteBuf = Unpooled.buffer(buf1.capacity()).writeBytes(buf1)
                     buf1.release()
                     val bsonBytes: Array[Byte] = buf2.array()
@@ -2221,7 +2221,7 @@ class BosonImpl(
                     buf3.release()
                     bsonBuf.release()
                   }else{
-                    val buf1: ByteBuf = buf.readBytes(bsonSize)
+                    val buf1: ByteBuf = buf.readRetainedSlice(bsonSize)
                     val buf2: ByteBuf = Unpooled.buffer(buf1.capacity()).writeBytes(buf1)
                     val array: Array[Byte] = buf2.array()
                     buf2.release()
@@ -2234,7 +2234,7 @@ class BosonImpl(
                 }else{
                   if(list.head._2.contains("..")){
                     val size: Int = buf.getIntLE(buf.readerIndex())
-                    val buf1: ByteBuf = buf.readBytes(size)
+                    val buf1: ByteBuf = buf.readRetainedSlice(size)
                     val buf2: ByteBuf = execStatementPatternMatch(buf1, list.drop(1), f)
                     val buf3: ByteBuf = execStatementPatternMatch(buf2.duplicate(), list, f)
                     result.writeBytes(buf3)
@@ -2243,14 +2243,14 @@ class BosonImpl(
                     buf3.release()
                     bsonBuf.release()
                   }else{
-                    val buf1: ByteBuf = buf.readBytes(bsonSize)
+                    val buf1: ByteBuf = buf.readRetainedSlice(bsonSize)
                     result.writeBytes(execStatementPatternMatch(bsonBuf, list.drop(1), f))
                     buf1.release()
                     bsonBuf.release()
                   }
                 }
               }else{
-                val buf1: ByteBuf = buf.readBytes(bsonSize)
+                val buf1: ByteBuf = buf.readRetainedSlice(bsonSize)
                 result.writeBytes(buf1)
                 buf1.release()
               }
@@ -2285,13 +2285,13 @@ class BosonImpl(
               buf.readDoubleLE()
             case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
               val valueLength: Int = buf.readIntLE()
-              buf.readBytes(valueLength).release()
+              buf.readRetainedSlice(valueLength).release()
             case D_BSONOBJECT =>
               val valueLength: Int = buf.getIntLE(buf.readerIndex())
-              buf.readBytes(valueLength).release()
+              buf.readRetainedSlice(valueLength).release()
             case D_BSONARRAY =>
               val valueLength: Int = buf.getIntLE(buf.readerIndex())
-              buf.readBytes(valueLength).release()
+              buf.readRetainedSlice(valueLength).release()
             case D_BOOLEAN =>
               buf.readByte()
             case D_NULL =>
@@ -2380,7 +2380,7 @@ class BosonImpl(
     (key, left, mid.toLowerCase(), right) match {
       case (EMPTY_KEY, 0, C_END, None) =>
         val size: Int = buf.getIntLE(buf.readerIndex())
-        val buf1: ByteBuf = buf.readBytes(size)
+        val buf1: ByteBuf = buf.readRetainedSlice(size)
         val res:ByteBuf  =  modifyArrayEnd(list, buf1, f,C_END, 0.toString).getByteBuf
         result.writeBytes(res)
         res.release()
@@ -2388,7 +2388,7 @@ class BosonImpl(
         result.capacity(result.writerIndex())
       case (EMPTY_KEY, a, UNTIL_RANGE, C_END) =>
         val size: Int = buf.getIntLE(buf.readerIndex())
-        val buf1: ByteBuf = buf.readBytes(size)
+        val buf1: ByteBuf = buf.readRetainedSlice(size)
         val res:ByteBuf  =  modifyArrayEnd(list, buf1, f,UNTIL_RANGE, a.toString).getByteBuf
         result.writeBytes(res)
         res.release()
@@ -2423,7 +2423,7 @@ class BosonImpl(
         }
       case (k, 0, C_END, None) =>
         val size: Int = buf.getIntLE(buf.readerIndex())
-        val buf1: ByteBuf = buf.readBytes(size)
+        val buf1: ByteBuf = buf.readRetainedSlice(size)
         val res:ByteBuf  =  modifyArrayEndWithKey(list, buf1,k, f,C_END, 0.toString).getByteBuf
         result.writeBytes(res)
         res.release()
@@ -2530,14 +2530,14 @@ class BosonImpl(
       resultCopy.writeDoubleLE(value0)
     case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
       val valueLength: Int = buf.readIntLE()
-      val bytes: ByteBuf = buf.readBytes(valueLength)
+      val bytes: ByteBuf = buf.readRetainedSlice(valueLength)
       result.writeIntLE(valueLength)
       result.writeBytes(bytes)
       resultCopy.writeIntLE(valueLength)
       resultCopy.writeBytes(bytes)
     case D_BSONOBJECT =>
       val length: Int = buf.getIntLE(buf.readerIndex())
-      val bsonBuf: ByteBuf = buf.readBytes(length)
+      val bsonBuf: ByteBuf = buf.readRetainedSlice(length)
       val resultAux: (BosonImpl,BosonImpl) = modifyEnd(bsonBuf, fieldID, f)
       val buf0: Array[Byte] = resultAux._1.getByteBuf.array()
       val buf1: Array[Byte] = resultAux._2.getByteBuf.array()
@@ -2550,7 +2550,7 @@ class BosonImpl(
       }
     case D_BSONARRAY =>
       val length: Int = buf.getIntLE(buf.readerIndex())
-      val bsonBuf: ByteBuf = buf.readBytes(length)
+      val bsonBuf: ByteBuf = buf.readRetainedSlice(length)
       val resultAux: (BosonImpl,BosonImpl) = modifyEnd(bsonBuf, fieldID, f)
      val buf0: Array[Byte] = resultAux._1.getByteBuf.array()
       val buf1: Array[Byte] = resultAux._2.getByteBuf.array()
@@ -2682,7 +2682,7 @@ class BosonImpl(
        }
      case D_BSONOBJECT =>
        val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-       val bson:ByteBuf = buffer.readBytes(valueLength )
+       val bson:ByteBuf = buffer.readRetainedSlice(valueLength )
        val buf1: ByteBuf = Unpooled.buffer(bson.capacity()).writeBytes(bson)
        val array: Array[Byte]= buf1.array()
        buf1.release()
@@ -2692,7 +2692,7 @@ class BosonImpl(
        (newBuffer.writeBytes(newValue), newValue.length - valueLength)
      case D_BSONARRAY =>
        val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
-       val bson: ByteBuf = buffer.readBytes(valueLength)
+       val bson: ByteBuf = buffer.readRetainedSlice(valueLength)
        val buf1: ByteBuf = Unpooled.buffer(bson.capacity()).writeBytes(bson)
        val array: Array[Byte]= buf1.array()
        buf1.release()
@@ -2740,7 +2740,7 @@ class BosonImpl(
       None
     case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
       val valueLength: Int = buffer.readIntLE()
-      val b: ByteBuf = buffer.readBytes(valueLength)
+      val b: ByteBuf = buffer.readRetainedSlice(valueLength)
       b.release()
       None
     case D_BSONOBJECT =>

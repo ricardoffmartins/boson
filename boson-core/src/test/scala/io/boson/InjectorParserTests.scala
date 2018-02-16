@@ -472,7 +472,7 @@ class InjectorParserTests extends FunSuite {
 
     val obj1: BsonObject = new BsonObject().put("name", "Ricardo").put("age", 28.0).put("country", "Portugal")
     val obj2: BsonObject = new BsonObject().put("name", "Tiago").put("age", 28.0).put("country", "Spain")
-    val obj3: BsonObject = new BsonObject().put("name", "João").put("age", 28.0).put("country", "Germany")
+    val obj3: BsonObject = new BsonObject().put("name", "Joao").put("age", 28.0).put("country", "Germany")
     val obj4: BsonObject = new BsonObject().put("name", "Pedro").put("age", 28.0).put("country", "France")
     val arr2: BsonArray = new BsonArray().add(obj1).add(obj2).add(obj3)
     val bE: BsonObject = new BsonObject().put("fridgeReadings", arr2)
@@ -505,7 +505,7 @@ class InjectorParserTests extends FunSuite {
 //      case BsNumber(n) => n
 //      case BsBoolean(b) => b
     }
-    assert( Vector("RicardoMINE", "TiagoMINE", "JoãoMINE", "RicardoMINE", "TiagoMINE", "JoãoMINE", "RicardoMINE", "TiagoMINE", "JoãoMINE")
+    assert( Vector("RicardoMINE", "TiagoMINE", "JoaoMINE", "RicardoMINE", "TiagoMINE", "JoaoMINE", "RicardoMINE", "TiagoMINE", "JoaoMINE")
       === resultParser)
   }
 
@@ -513,7 +513,7 @@ class InjectorParserTests extends FunSuite {
 
     val obj1: BsonObject = new BsonObject().put("name", "Ricardo").put("age", 28.0).put("country", "Portugal")
     val obj2: BsonObject = new BsonObject().put("name", "Tiago").put("age", 28.0).put("country", "Spain")
-    val obj3: BsonObject = new BsonObject().put("name", "João").put("age", 28.0).put("country", "Germany")
+    val obj3: BsonObject = new BsonObject().put("name", "Joao").put("age", 28.0).put("country", "Germany")
     val obj4: BsonObject = new BsonObject().put("name", "Pedro").put("age", 28.0).put("country", "France")
     val arr2: BsonArray = new BsonArray().add(obj1).add(obj2).add(obj3)
     val bE: BsonObject = new BsonObject().put("fridgeReadings", arr2)
@@ -546,7 +546,7 @@ class InjectorParserTests extends FunSuite {
 //      case BsNumber(n) => n
 //      case BsBoolean(b) => b
     }
-    assert( Vector("RicardoMINE", "TiagoMINE", "JoãoMINE", "RicardoMINE", "TiagoMINE", "JoãoMINE", "RicardoMINE", "TiagoMINE", "JoãoMINE")
+    assert( Vector("RicardoMINE", "TiagoMINE", "JoaoMINE", "RicardoMINE", "TiagoMINE", "JoaoMINE", "RicardoMINE", "TiagoMINE", "JoaoMINE")
 
       === resultParser)
   }

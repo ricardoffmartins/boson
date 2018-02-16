@@ -235,18 +235,18 @@ object Mapper {
               list.append(number)
             case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
               val size: Int = buf.readIntLE()
-              val str: Array[Byte] = Unpooled.copiedBuffer(buf.readBytes(size)).array()
+              val str: Array[Byte] = Unpooled.copiedBuffer(buf.readRetainedSlice(size)).array()
 
               list.append(new String(str))
             case D_BSONOBJECT =>
               val bsonSize: Int = buf.getIntLE(buf.readerIndex())
-              val bson: ByteBuf = buf.readBytes(bsonSize)
+              val bson: ByteBuf = buf.readRetainedSlice(bsonSize)
               val res: Map[String, _] = decodeBsonObject(bson)
               bson.release()
               list.append(res)
             case D_BSONARRAY =>
               val bsonSize: Int = buf.getIntLE(buf.readerIndex())
-              val bson: ByteBuf = buf.readBytes(bsonSize)
+              val bson: ByteBuf = buf.readRetainedSlice(bsonSize)
               val res: List[Any] = decodeBsonArray(bson)
               bson.release()
               list.append(res)
@@ -290,7 +290,7 @@ object Mapper {
               map.put(strKey, number)
             case D_ARRAYB_INST_STR_ENUM_CHRSEQ =>
               val size: Int = buf.readIntLE()
-              val buf1: ByteBuf = buf.readBytes(size-1)
+              val buf1: ByteBuf = buf.readRetainedSlice(size-1)
               val buf2: ByteBuf = Unpooled.copiedBuffer(buf1)
               buf1.release()
               val str: Array[Byte] = buf2.array()
@@ -298,13 +298,13 @@ object Mapper {
               map.put(strKey, new String(str))
             case D_BSONOBJECT =>
               val bsonSize: Int = buf.getIntLE(buf.readerIndex())
-              val bson: ByteBuf = buf.readBytes(bsonSize)
+              val bson: ByteBuf = buf.readRetainedSlice(bsonSize)
               val res: Map[String, Any] = decodeBsonObject(bson)
               bson.release()
               map.put(strKey, res)
             case D_BSONARRAY =>
               val bsonSize: Int = buf.getIntLE(buf.readerIndex())
-              val bson: ByteBuf = buf.readBytes(bsonSize)
+              val bson: ByteBuf = buf.readRetainedSlice(bsonSize)
               val res: List[Any] = decodeBsonArray(bson)
               bson.release()
               map.put(strKey, res)

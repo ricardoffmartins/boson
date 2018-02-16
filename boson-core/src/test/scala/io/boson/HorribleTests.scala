@@ -22,11 +22,11 @@ class HorribleTests extends FunSuite {
   ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED)
   val br4: BsonArray = new BsonArray().add("Insecticida")
   val br1: BsonArray = new BsonArray().add("Tarantula").add("Aracnídius").add(br4)
-  val obj11: BsonObject = new BsonObject().put("José", br1)
+  val obj11: BsonObject = new BsonObject().put("Jose", br1)
   val br2: BsonArray = new BsonArray().add("Spider")
-  val obj2: BsonObject = new BsonObject().put("José", br2)
+  val obj2: BsonObject = new BsonObject().put("Jose", br2)
   val br3: BsonArray = new BsonArray().add("Fly")
-  val obj3: BsonObject = new BsonObject().put("José", br3)
+  val obj3: BsonObject = new BsonObject().put("Jose", br3)
   val arr11: BsonArray = new BsonArray().add(obj11).add(obj2).add(obj3).add(br4)
   val bsonEvent1: BsonObject = new BsonObject().put("StartUp", arr11)
 
@@ -151,7 +151,7 @@ class HorribleTests extends FunSuite {
   }
 
   test("array prob 1") {
-    val expression: String = "   José[     0    to   end      ]"
+    val expression: String = "Jose[0 to end]"
     val boson: BosonImpl = new BosonImpl(byteArray = Option(bsonEvent1.encode().getBytes))
     val result: BsValue = callParse(boson, expression)
 
@@ -165,7 +165,7 @@ class HorribleTests extends FunSuite {
   }
 
   test("array prob 2") {
-    val expression: String = "[     0    to   end      ]"
+    val expression: String = "[0 to end]"
     val boson: BosonImpl = new BosonImpl(byteArray = Option(arr11.encode().getBytes))
     val result: BsValue = callParse(boson, expression)
     val expected: Vector[Any] =
@@ -192,7 +192,7 @@ class HorribleTests extends FunSuite {
   test("array prob 5") {
     br3.add("Wrong")
     br2.add("some")
-    val expression: String = "José[0 until end]  "
+    val expression: String = "Jose[0 until end]  "
     val boson: BosonImpl = new BosonImpl(byteArray = Option(bsonEvent1.encode().getBytes))
     val result: BsValue = callParse(boson, expression)
     assertEquals(BsSeq(Vector(

@@ -26,7 +26,7 @@ import scala.collection.JavaConverters;
 import static org.junit.Assert.assertArrayEquals;
 
 
-public class APITestsJava {
+public class APITestsJ {
 
   private BsonObject hat3 = new BsonObject().put("Price", 38).put("Color", "Blue");
   private BsonObject hat2 = new BsonObject().put("Price", 35).put("Color", "White");

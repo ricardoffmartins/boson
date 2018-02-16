@@ -1,3 +1,4 @@
+import Dependencies._
 
 val basicSettings = Seq(
 organization:="organization name",
@@ -87,6 +88,12 @@ lazy val boson = project.in(file("."))
 
 lazy val core = project.in(file("boson-core"))
   .settings(basicSettings: _*)
+  .settings(
+    libraryDependencies ++= Dependencies.compile(asm, asmTree, asmAnalysis, asmUtil),
+    javacOptions in Test += "-g", // needed for bytecode rewriting
+    crossPaths := false,
+    autoScalaLibrary := false
+  )
 
 
 credentials += Credentials(

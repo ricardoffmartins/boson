@@ -2474,7 +2474,6 @@ class BosonImpl(
       Unpooled.buffer(newBson.length).writeBytes(newBson)
   }
 }
-
 //ModifyEnd
 /* def modifyEnd[T](buffer: ByteBuf, fieldID:String, f:T=>T, result:ByteBuf=Unpooled.buffer(), resultCopy:ByteBuf=Unpooled.buffer()):(BosonImpl, BosonImpl)={
    val buf: ByteBuf = buffer.duplicate()

@@ -18,7 +18,7 @@ import org.scalatest.junit.JUnitRunner
 class ExtractorTests extends FunSuite {
   ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED)
   val obj1: BsonObject = new BsonObject().put("Andre", 975).put("António", 975L)
-  val obj2: BsonObject = new BsonObject().put("Pedro", 1250L).put("Jose", false)
+  val obj2: BsonObject = new BsonObject().put("Pedro", 1250L).put("José", false)
   val obj3: BsonObject = new BsonObject().put("Americo", 1500).putNull("Amadeu")
 
   val arr: BsonArray = new BsonArray().add(obj1).add(obj2).add(obj3)
@@ -44,7 +44,7 @@ class ExtractorTests extends FunSuite {
   test("Extract Boolean") {
     val bsonEvent: BsonObject = new BsonObject().put("StartUp", arr)
     val bosonBson: BosonImpl = new BosonImpl(byteArray = Option(bsonEvent.encode().getBytes()))
-    assert(false === bosonBson.extract(bosonBson.getByteBuf, List(("Jose","first")), List((None,None,""))).get.asInstanceOf[Vector[Any]].head)
+    assert(false === bosonBson.extract(bosonBson.getByteBuf, List(("José","first")), List((None,None,""))).get.asInstanceOf[Vector[Any]].head)
   }
 
   test("Extract Null") {
@@ -101,9 +101,9 @@ class ExtractorTests extends FunSuite {
   test("Extract deep layer") {
     val bsonEvent: BsonObject = new BsonObject().put("StartUp", arr)
     val arr2: BsonArray = new BsonArray().add("Day3").add("Day20").add("Day31")
-    obj2.put("JoseMonthLeave", arr2)
+    obj2.put("JoséMonthLeave", arr2)
     val bosonBson: BosonImpl = new BosonImpl(byteArray = Option(bsonEvent.encode().getBytes()))
-    val result = bosonBson.extract(bosonBson.getByteBuf, List(("JoseMonthLeave","all")), List((None,None,""))).get.asInstanceOf[Vector[Array[Any]]]
+    val result = bosonBson.extract(bosonBson.getByteBuf, List(("JoséMonthLeave","all")), List((None,None,""))).get.asInstanceOf[Vector[Array[Any]]]
     val expected: Vector[Array[Byte]] = Vector(arr2.encodeToBarray())
     assert(expected.size === result.size)
     assertTrue(expected.zip(result).forall(b => b._1.sameElements(b._2)))

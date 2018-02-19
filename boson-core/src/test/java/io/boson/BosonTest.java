@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class BosonTest {
 
     private final String key = "Name";
-    private final String value = "Jose";
+    private final String value = "José";
     private BsonObject obj1 = new BsonObject().put(key,value);
 
 

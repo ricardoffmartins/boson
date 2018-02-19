@@ -17,11 +17,11 @@ class RestAssured {
 
   val br4: BsonArray = new BsonArray().add("Insecticida")
   val br1: BsonArray = new BsonArray().add("Tarantula").add("Aracnídius").add(br4)
-  val obj1: BsonObject = new BsonObject().put("Jose", br1)
+  val obj1: BsonObject = new BsonObject().put("José", br1)
   val br2: BsonArray = new BsonArray().add("Spider")
-  val obj2: BsonObject = new BsonObject().put("Jose", br2)
+  val obj2: BsonObject = new BsonObject().put("José", br2)
   val br3: BsonArray = new BsonArray().add("Fly")
-  val obj3: BsonObject = new BsonObject().put("Jose", br3)
+  val obj3: BsonObject = new BsonObject().put("José", br3)
   val arr: BsonArray = new BsonArray().add(2.2).add(obj1).add(obj2).add(obj3).add(br4)
   val bsonEvent: BsonObject = new BsonObject().put("StartUp", arr)
 

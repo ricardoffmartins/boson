@@ -1,12 +1,11 @@
 package benchmark
 
 import bsonLib.BsonObject
-import io.boson.bson.bsonImpl.BosonImpl
-import io.boson.bson.bsonPath.{Interpreter, Program, TinyLanguage}
-import io.boson.bson.bsonValue
-import io.boson.bson.bsonValue.{BsSeq, BsValue}
 import io.netty.util.ResourceLeakDetector
 import io.vertx.core.json.JsonObject
+import io.zink.boson.bson.bsonImpl.BosonImpl
+import io.zink.boson.bson.bsonPath.{Interpreter, Program, TinyLanguage}
+import io.zink.boson.bson.bsonValue.{BsObject, BsValue}
 import org.scalameter._
 
 import scala.io.Source
@@ -23,11 +22,11 @@ object PerformanceTest extends App {
         case parser.Success(r, _) =>
           val interpreter = new Interpreter(boson, r.asInstanceOf[Program])
           interpreter.run()
-        case parser.Error(_, _) => bsonValue.BsObject.toBson("Error parsing!")
-        case parser.Failure(_, _) => bsonValue.BsObject.toBson("Failure parsing!")
+        case parser.Error(_, _) => BsObject.toBson("Error parsing!")
+        case parser.Failure(_, _) => BsObject.toBson("Failure parsing!")
       }
     } catch {
-      case e: RuntimeException => bsonValue.BsObject.toBson(e.getMessage)
+      case e: RuntimeException => BsObject.toBson(e.getMessage)
     }
   }
 

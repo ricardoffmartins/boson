@@ -4,10 +4,10 @@ import java.util.concurrent.{CompletableFuture, CountDownLatch}
 
 import bsonLib.BsonObject
 import com.jayway.jsonpath.{Configuration, JsonPath}
-import io.boson.bson.Boson
-import io.boson.bson.bsonValue.BsValue
-import io.boson.json.Joson
 import io.vertx.core.json.JsonObject
+import io.zink.boson.bson.Boson
+import io.zink.boson.bson.bsonValue.BsValue
+import io.zink.boson.json.Joson
 import org.scalameter._
 //import com.jayway.jsonpath.JsonPath._
 

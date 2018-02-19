@@ -2,7 +2,7 @@ import Dependencies._
 
 val basicSettings = Seq(
 organization:="organization name",
-name := "boson",
+//name := "boson",
 version := "version",
 
 scalaVersion := "2.12.3",
@@ -83,10 +83,10 @@ publishTo := {
 }
 
 lazy val boson = project.in(file("."))
-    .aggregate(core)
+    .aggregate(bosonCore, bosonScala)
   .settings(basicSettings: _*)
 
-lazy val core = project.in(file("boson-core"))
+lazy val bosonCore = project.in(file("boson-core"))
   .settings(basicSettings: _*)
   .settings(
     libraryDependencies ++= Dependencies.compile(asm, asmTree, asmAnalysis, asmUtil),
@@ -95,6 +95,15 @@ lazy val core = project.in(file("boson-core"))
     autoScalaLibrary := false
   )
 
+lazy val bosonScala = project.in(file("boson-scala"))
+    .dependsOn(bosonCore)
+  .settings(basicSettings: _*)
+  .settings(
+    libraryDependencies ++= Dependencies.compile(asm, asmTree, asmAnalysis, asmUtil),
+    javacOptions in Test += "-g", // needed for bytecode rewriting
+    crossPaths := false,
+    autoScalaLibrary := false
+  )
 
 credentials += Credentials(
   "Sonatype Nexus Repository Manager",

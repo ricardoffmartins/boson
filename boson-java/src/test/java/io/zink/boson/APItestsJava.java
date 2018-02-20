@@ -1,8 +1,9 @@
 package io.zink.boson;
+
 import bsonLib.BsonArray;
 import bsonLib.BsonObject;
-import io.zink.boson.bson.Boson;
 import io.zink.boson.bson.bsonValue.BsValue;
+import io.zink.bosonInterface.Boson;
 import org.junit.Test;
 
 import java.nio.Buffer;
@@ -13,9 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class APItestsJava {
@@ -47,8 +46,8 @@ public class APItestsJava {
         CompletableFuture<BsValue> future1 = new CompletableFuture<>();
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
-
         scala.collection.immutable.Vector<Object> res = (scala.collection.immutable.Vector<Object>)future1.join().getValue();
+
         List<Object> result = scala.collection.JavaConverters.seqAsJavaList(res);
         List<Object> expected = new ArrayList<>();
         expected.add(title2.encodeToBarray());
@@ -93,7 +92,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(21.5)",
@@ -153,7 +152,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(Java, Scala, C++)",
@@ -257,7 +256,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(15.5, 39, 21.5, 40, 12.6, 38, 48, 35, 38)",
@@ -271,7 +270,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(15.5, 39, 21.5, 40, 12.6, 38)",
@@ -285,7 +284,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(Java, Scala, C++)",
@@ -299,7 +298,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(JavaMachine, ScalaMachine, C++Machine)",
@@ -320,7 +319,7 @@ public class APItestsJava {
         expected.add(edition2.encodeToBarray());
         expected.add(edition3.encodeToBarray());
 
-        System.out.println(result);
+        //System.out.println(result);
 
         assert(result.size() == expected.size());
         for(int i =0;i<result.size();i++) {
@@ -363,7 +362,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(Java, JavaMachine, Scala, ScalaMachine, C++, C++Machine)",
@@ -398,7 +397,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(15.5, 39, 21.5, 40, 12.6, 38, 48, 35, 38)",
@@ -436,7 +435,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(JavaMachine, 39, ScalaMachine, 40, C++Machine, 38)",
@@ -450,7 +449,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(Java, JavaMachine, Scala, ScalaMachine, C++, C++Machine)",
@@ -519,7 +518,7 @@ public class APItestsJava {
 
     @Test
     public void ExtractPosFromEveryArrayInsideOtherArrayPosEnd() {
-        System.out.println(arrEvent);
+        //System.out.println(arrEvent);
         String expression = ".[0 to 2]..[0 to end]";
         CompletableFuture<BsValue> future1 = new CompletableFuture<>();
         Boson boson = Boson.extractor(expression, future1::complete);
@@ -586,7 +585,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(validatedByteBuffer);
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals("Vector(15.5, 39, 21.5, 40, 12.6, 38, 48, 35, 38)", result.toString());
     }
@@ -694,7 +693,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(arr1.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector()",
@@ -731,7 +730,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(arr1.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector()",
@@ -745,7 +744,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(arr1.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(100000)",
@@ -758,7 +757,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(arr1.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector(100000)",
@@ -856,7 +855,7 @@ public class APItestsJava {
 
     @Test
     public void ExtractAllElemsOfAllElemsOfArrayRootLastPosLimit(){
-       // System.out.println(arr1);
+       // //System.out.println(arr1);
         String expression = ".[7 to 7].*.*";
         CompletableFuture<BsValue> future1 = new CompletableFuture<>();
         Boson boson = Boson.extractor(expression, future1::complete);
@@ -1167,7 +1166,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bE.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector()",
@@ -1181,7 +1180,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bE.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals(
                 "Vector()",
@@ -1215,7 +1214,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(byteArr);
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals("Vector()", result.toString());
     }
@@ -1227,7 +1226,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals("Vector()", result.toString());
     }
@@ -1239,7 +1238,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals("Vector()", result.toString());
     }
@@ -1276,7 +1275,7 @@ public class APItestsJava {
         Boson boson = Boson.extractor(expression, future1::complete);
         boson.go(bson.encodeToBarray());
         Object result = future1.join().getValue();
-        System.out.println(result);
+        //System.out.println(result);
 
         assertEquals("Vector()", result.toString());
     }
@@ -1726,7 +1725,7 @@ public class APItestsJava {
         BsonArray servicesx = new BsonArray().add(new BsonObject()).add(new BsonObject()).add(new BsonObject());
         BsonObject rootx = new BsonObject().put("Store", servicesx);
         String expression = ".Store.[0 to end]";
-        Boson bosonInjector = Boson.injector(expression,  (byte[] bo) ->new BsonObject().encodeToBarray() );
+        Boson bosonInjector = Boson.injector(expression,  (byte[] bo) -> new BsonObject().encodeToBarray() );
         CompletableFuture<byte[]> midResult1 = bosonInjector.go(root.encodeToBarray());
         byte[] result = midResult1.join();
         assertArrayEquals(rootx.encodeToBarray(), result );

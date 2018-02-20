@@ -83,7 +83,7 @@ publishTo := {
 }
 
 lazy val boson = project.in(file("."))
-    .aggregate(bosonCore, bosonScala)
+    .aggregate(bosonCore, bosonScala, bosonJava)
   .settings(basicSettings: _*)
 
 lazy val bosonCore = project.in(file("boson-core"))
@@ -97,6 +97,16 @@ lazy val bosonCore = project.in(file("boson-core"))
 
 lazy val bosonScala = project.in(file("boson-scala"))
     .dependsOn(bosonCore)
+  .settings(basicSettings: _*)
+  .settings(
+    libraryDependencies ++= Dependencies.compile(asm, asmTree, asmAnalysis, asmUtil),
+    javacOptions in Test += "-g", // needed for bytecode rewriting
+    crossPaths := false,
+    autoScalaLibrary := false
+  )
+
+lazy val bosonJava = project.in(file("boson-java"))
+  .dependsOn(bosonCore)
   .settings(basicSettings: _*)
   .settings(
     libraryDependencies ++= Dependencies.compile(asm, asmTree, asmAnalysis, asmUtil),

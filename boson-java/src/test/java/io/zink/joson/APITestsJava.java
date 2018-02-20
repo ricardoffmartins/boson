@@ -6,23 +6,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import de.undercouch.bson4jackson.BsonFactory;
-import io.zink.boson.bson.Boson;
-import io.zink.boson.bson.bsonImpl.BosonImpl;
-import io.zink.boson.bson.bsonValue.BsValue;
-import io.zink.boson.json.Joson;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.zink.bosonInterface.Boson;
+import io.zink.boson.bson.bsonImpl.BosonImpl;
+import io.zink.boson.bson.bsonValue.BsValue;
+import io.zink.josonInterface.Joson;
 import mapper.Mapper;
 import org.junit.Test;
 import scala.Option;
+import scala.collection.JavaConverters;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import scala.collection.JavaConverters;
+
 import static org.junit.Assert.assertArrayEquals;
 
 
@@ -65,8 +67,8 @@ public class APITestsJava {
             JsonNode s = mapper.readTree(os.toByteArray());
             os.flush();
             //read and print json received and original json
-            System.out.println(s.toString());
-            System.out.println(json);
+            //System.out.println(s.toString());
+            //System.out.println(json);
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -75,8 +77,8 @@ public class APITestsJava {
     public void JOSON_test_V2(){ // joson == boson
 
         String expression = "Store";
-        System.out.println("WORK WITH JOSON\n");
-        System.out.println("|-------- Perform Injection --------|\n");
+        //System.out.println("WORK WITH JOSON\n");
+        //System.out.println("|-------- Perform Injection --------|\n");
         Joson joson = Joson.injector(expression, (byte[] x ) -> {
             BosonImpl b = new BosonImpl(Option.apply(x), Option.empty(), Option.empty());
             Map<String,Object> m = JavaConverters.mapAsJavaMap(Mapper.decodeBsonObject(b.getByteBuf()));
@@ -95,7 +97,7 @@ public class APITestsJava {
             });
         CompletableFuture<String> midResult  = joson.go(json);
         String result = midResult.join();
-        System.out.println("|-------- Perform Extraction --------|\n");
+        //System.out.println("|-------- Perform Extraction --------|\n");
         CompletableFuture<BsValue> future = new CompletableFuture<>();
         Joson joson1 = Joson.extractor(expression, future::complete);
         joson1.go(result);
@@ -104,13 +106,13 @@ public class APITestsJava {
         scala.collection.immutable.Vector<Object> res = (scala.collection.immutable.Vector<Object>)future.join().getValue();
 
         //byte[] json1 =
-        List<Object> l = scala.collection.JavaConverters.seqAsJavaList(res);
+        List<Object> l = JavaConverters.seqAsJavaList(res);
 
                 //.get(0); //.asInstanceOf<Vector<byte[]>>.head
-        System.out.println(l.get(0));
+        //System.out.println(l.get(0));
 
-        System.out.println("WORK WITH BOSON\n");
-        System.out.println("|-------- Perform Injection --------|\n");
+        //System.out.println("WORK WITH BOSON\n");
+        //System.out.println("|-------- Perform Injection --------|\n");
         byte[] validBsonArray = bson.encodeToBarray();
         Boson boson = Boson.injector(expression,(byte[] x) -> {
             BosonImpl b = new BosonImpl(Option.apply(x), Option.empty(), Option.empty());
@@ -128,19 +130,19 @@ public class APITestsJava {
             });
         CompletableFuture<byte[]> midResult1 = boson.go(validBsonArray);
         byte[] result1 = midResult1.join();
-        System.out.println("|-------- Perform Extraction --------|\n");
+        //System.out.println("|-------- Perform Extraction --------|\n");
         CompletableFuture<BsValue> future1 = new CompletableFuture<>();
         Boson boson1 = Boson.extractor(expression, future1::complete);
         boson1.go(result1);
         scala.collection.immutable.Vector<Object> res1 = (scala.collection.immutable.Vector<Object>)future1.join().getValue();
 
         //byte[] json1 =
-        List<Object> l1 = scala.collection.JavaConverters.seqAsJavaList(res1);
+        List<Object> l1 = JavaConverters.seqAsJavaList(res1);
 
         //.get(0); //.asInstanceOf<Vector<byte[]>>.head
 
 
-        System.out.println("|-------- Perform Assertion --------|\n\n");
+        //System.out.println("|-------- Perform Assertion --------|\n\n");
 
         assertArrayEquals((byte[])l.get(0),(byte[]) l1.get(0));
 

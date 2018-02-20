@@ -9,8 +9,6 @@ import javax.json.stream.JsonParser;
 import java.io.StringReader;
 
 
-
-
 public class BuilderTest {
 
     /* For example

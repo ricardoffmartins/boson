@@ -15,8 +15,10 @@ class Interpreter[T](boson: BosonImpl, program: Program, f: Option[Function[T,T]
   def run(): BsValue = {
     f match {
       case Some(_) => //func /*Inejctor*/
+        println("Injector")
         startInjector(program.statement)
       case None => /*Extractor*/
+        println("Extractor")
         start(program.statement)
     }
   }
@@ -149,7 +151,7 @@ class Interpreter[T](boson: BosonImpl, program: Program, f: Option[Function[T,T]
       }else{
        united.zip(stat.dotList)
       }
-    println(zipped)
+    //println(zipped)
     executeMultipleKeysInjector(zipped)
   }
 
@@ -161,7 +163,8 @@ class Interpreter[T](boson: BosonImpl, program: Program, f: Option[Function[T,T]
           val bsResult: BsValue = BsObject.toBson( new BosonImpl(byteArray = Option(v.array())))
           v.release()
           bsResult
-        case Failure(e)=>BsException(e.getMessage)      }
+        case Failure(e)=>
+          BsException(e.getMessage)      }
     boson.getByteBuf.release()
     result
   }

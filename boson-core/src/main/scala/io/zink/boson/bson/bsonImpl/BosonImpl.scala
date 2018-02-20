@@ -1316,7 +1316,13 @@ class BosonImpl(
         buf.release()
         val bsonBytes: Array[Byte] =arrayBytes
         bson.release()
-        val newValue: Array[Byte] = applyFunction(f, bsonBytes).asInstanceOf[Array[Byte]]
+        val newValue: Array[Byte] = Try(applyFunction(f, bsonBytes).asInstanceOf[Array[Byte]])match {
+          case Success(v) =>
+            v
+          case Failure(e) =>
+            throw CustomException(s"Type Error. Cannot Cast ${bsonBytes.getClass.getSimpleName.toLowerCase} inside the Injector Function.")
+
+        }
         (result.writeBytes(newValue), newValue.length-valueLength)
       case D_BSONARRAY =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
@@ -1326,7 +1332,13 @@ class BosonImpl(
         buf.release()
         val bsonBytes: Array[Byte] = arrayBytes
         bson.release()
-        val value: Array[Byte] = applyFunction(f, bsonBytes).asInstanceOf[Array[Byte]]
+        val value: Array[Byte] = Try(applyFunction(f, bsonBytes).asInstanceOf[Array[Byte]])match {
+        case Success(v) =>
+          v
+        case Failure(e) =>
+          throw CustomException(s"Type Error. Cannot Cast ${bsonBytes.getClass.getSimpleName.toLowerCase} inside the Injector Function.")
+
+      }
         (result.writeBytes(value), value.length-valueLength)
       case D_BOOLEAN =>
         val value0: Boolean = buffer.readBoolean()
@@ -1459,7 +1471,13 @@ class BosonImpl(
         buf.release()
         val bsonBytes: Array[Byte] = arrayBytes
         bsonObj.release()
-        val newValue: Array[Byte] = applyFunction(f,bsonBytes).asInstanceOf[Array[Byte]]
+        val newValue: Array[Byte] = Try(applyFunction(f,bsonBytes).asInstanceOf[Array[Byte]])match{
+          case Success(v)=>
+            v
+          case Failure(e)=>
+            throw CustomException(s"Type Error. Cannot Cast ${bsonBytes.getClass.getSimpleName.toLowerCase} inside the Injector Function.")
+
+        }
         result.writeBytes(newValue)
       case D_BSONARRAY =>
         val valueLength: Int = buffer.getIntLE(buffer.readerIndex())
@@ -1470,7 +1488,13 @@ class BosonImpl(
         buf.release()
         val bsonBytes: Array[Byte] =arrayBytes
         bsonArray.release()
-        val value: Array[Byte] = applyFunction(f, bsonBytes).asInstanceOf[Array[Byte]]
+        val value: Array[Byte]= Try(applyFunction(f,bsonBytes).asInstanceOf[Array[Byte]])match{
+        case Success(v)=>
+          v
+        case Failure(e)=>
+          throw CustomException(s"Type Error. Cannot Cast ${bsonBytes.getClass.getSimpleName.toLowerCase} inside the Injector Function.")
+
+      }
         result.writeBytes(value)
       case D_BOOLEAN =>
         val value0: Boolean = buffer.readBoolean()

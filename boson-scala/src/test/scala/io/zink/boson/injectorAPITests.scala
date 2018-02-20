@@ -283,7 +283,7 @@ class injectorAPITests extends FunSuite {
 
     val expected: Vector[Array[Byte]] = Vector(b10.encodeToBarray())
     val result = future.join().getValue.asInstanceOf[Vector[Array[Byte]]]
-    println("result: " + new String(result.head)+ s", expected: ${new String(expected.head)}")
+    //println("result: " + new String(result.head)+ s", expected: ${new String(expected.head)}")
     assert(expected.size === result.size)
     assertTrue(expected.zip(result).forall(b => b._1.sameElements(b._2)))
   }

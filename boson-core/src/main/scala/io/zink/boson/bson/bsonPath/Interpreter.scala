@@ -15,10 +15,8 @@ class Interpreter[T](boson: BosonImpl, program: Program, f: Option[Function[T,T]
   def run(): BsValue = {
     f match {
       case Some(_) => //func /*Inejctor*/
-        println("Injector")
         startInjector(program.statement)
       case None => /*Extractor*/
-        println("Extractor")
         start(program.statement)
     }
   }

@@ -33,7 +33,6 @@ public class BosonInjector<T> implements Boson {
             if(pr.successful()){
                 Interpreter interpreter = new Interpreter(netty, (Program) pr.get(), apply(injectFunc));
                 BsValue res = interpreter.run();
-                System.out.println(res.getClass());
 
                 return res;
             }else{
@@ -53,7 +52,6 @@ public class BosonInjector<T> implements Boson {
                 CompletableFuture.supplyAsync(() -> {
                     BsValue res =  parseInj(boson, injectFunction, expression);
                     try{
-                        System.out.println(res.getClass().getSimpleName());
                         switch (res.getClass().getSimpleName()){
                             case "BsException": return bsonByteEncoding;
                             case "BsBoson": return ((BsBoson) res).getValue().getByteBuf().array();
@@ -62,7 +60,7 @@ public class BosonInjector<T> implements Boson {
 
 
                     }catch(ClassCastException ex){
-                        System.out.println(bsonByteEncoding);
+                        System.out.println(ex.getMessage());
                         return bsonByteEncoding;
                     }
                 });

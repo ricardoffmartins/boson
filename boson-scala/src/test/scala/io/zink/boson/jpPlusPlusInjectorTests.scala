@@ -1647,9 +1647,9 @@ class jpPlusPlusInjectorTests extends FunSuite {
     val expression: String = "..BooK"
     val boson: Boson = BosonObject.injector(expression, (x:Array[Byte]) => {
       val str: String = new String(x)
-      println(str)
+     // println(str)
       val result: String = str.concat("!!!")
-      println(result)
+     // println(result)
       result.getBytes()
     })
     val future: CompletableFuture[Array[Byte]] = boson.go(validatedByteArr)

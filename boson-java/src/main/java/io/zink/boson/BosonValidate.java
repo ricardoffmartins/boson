@@ -52,11 +52,7 @@ public class BosonValidate<T> implements Boson {
                     Option e = Option.empty();
                     BosonImpl boson = new BosonImpl(opt, e,e);
                     BsValue value = callParse(boson, expression);
-                    if(value.getClass().equals(BsValue.class)){
-                        validateFunction.accept((T)value);
-                    }else{
-                        throw new RuntimeException("BosonExtractor -> go() default case!!!");
-                    }
+                    validateFunction.accept((T)value);
                     return bsonByteEncoding;
                 });
         return future;
@@ -70,11 +66,7 @@ public class BosonValidate<T> implements Boson {
                     Option e = Option.empty();
                     BosonImpl boson = new BosonImpl(e,opt,e);
                     BsValue value = callParse(boson, expression);
-                    if(value.getClass().equals(BsValue.class)){
-                        validateFunction.accept((T)value);
-                    }else{
-                        throw new RuntimeException("BosonExtractor -> go() default case!!!");
-                    }
+                    validateFunction.accept((T)value);
                     return bsonByteBufferEncoding;
                 });
         return future;

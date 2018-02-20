@@ -74,11 +74,7 @@ public class JosonValidate<T> implements Joson {
                         Option e = Option.empty();
                         BosonImpl boson = new BosonImpl(opt, e,e);
                         BsValue value = callParse(boson, expression);
-                        if(value.getClass().equals(BsValue.class)){
-                            validateFunction.accept((T)value);
-                        }else{
-                            throw new RuntimeException("BosonExtractor -> go() default case!!!");
-                        }
+                        validateFunction.accept((T)value);
                         return jsonStr;
                     });
         }catch (IOException e){

@@ -72,8 +72,9 @@ public class JosonInjector<T> implements Joson {
             future =
                     CompletableFuture.supplyAsync(() -> {
                         BsValue res =  parseInj(boson, injectFunction, expression);
-                        if(res.getClass().equals(BsValue.class)){
-                            if(res.getClass().equals(BsBoson.class)){
+                        switch (res.getClass().getSimpleName()){
+                            case "BsException": return jsonStr;
+                            case "BsBoson":
                                 try {
                                     JsonNode s = mapper.readTree(((BsBoson) res).getValue().getByteBuf().array());
                                     return s.toString();
@@ -81,13 +82,11 @@ public class JosonInjector<T> implements Joson {
                                     System.out.println(ex.getMessage());
                                     return jsonStr;
                                 }
-                            }else{
-                                System.out.println(((BsException)res).getValue());
-                                return jsonStr;
-                            }
-                        }else {
-                            return jsonStr;
+                                //return ((BsBoson) res).getValue().getByteBuf().nioBuffer();
+                            default:  return jsonStr;
                         }
+
+
                     });
         }catch(IOException e){
             System.out.println(e.getMessage());
